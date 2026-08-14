@@ -8,3 +8,7 @@ __pycache__/
 # 虚拟环境
 venv/
 env/
+
+# 密钥（不要提交！）
+api_key.txt
+.env
