@@ -40,7 +40,6 @@ materials-ml/
 ├── data/
 │   └── materials.csv         # 下载的氧化物数据
 └── notebooks/
-    ├── 01_data_exploration.py    # 数据探索
     ├── 02_download_data.py       # 从 Materials Project 下载数据
     └── 03_train_model.py         # 训练模型
 ```
@@ -64,7 +63,6 @@ python app.py
 ## 项目进度
 
 - [x] 项目初始化
-- [x] 数据探索（成分-性能关系分析）
 - [x] 从 Materials Project 获取真实数据
 - [x] 训练性能预测模型（MAE = 0.592 eV）
 - [x] Web 界面交互预测（输入完整化学式）
