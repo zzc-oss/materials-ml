@@ -17,6 +17,7 @@
 
 import re
 import pandas as pd
+import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error
@@ -67,3 +68,5 @@ importance = importance.sort_values(ascending=False)
 print("\n特征重要性排名：")
 for name, value in importance.items():
     print(f"  {name}: {value:.3f}")
+joblib.dump(model,"model.joblib")
+print("\n模型已保存到 model.joblib")
