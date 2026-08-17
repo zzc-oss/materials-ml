@@ -32,16 +32,16 @@ import feature_engineering as fe
 df = pd.read_csv("data/materials.csv")
 
 # ============ 2. 收集所有元素、生成特征列 ============
-元素列表 = fe.收集元素列表(df["化学式"])
-特征名列表 = fe.生成特征名(元素列表)
-print(f"数据 {len(df)} 条，识别到 {len(元素列表)} 种非氧元素")
-print(f"特征总数：{len(特征名列表)}"
-      f"（数值 {len(fe.数值特征名)} + 元素 {len(元素列表)}）\n")
+element_list = fe.collect_elements(df["化学式"])
+feature_names = fe.generate_feature_names(element_list)
+print(f"数据 {len(df)} 条，识别到 {len(element_list)} 种非氧元素")
+print(f"特征总数：{len(feature_names)}"
+      f"（数值 {len(fe.NUMERIC_FEATURES)} + 元素 {len(element_list)}）\n")
 
 # ============ 3. 把所有化学式转成特征矩阵 ============
 X = pd.DataFrame(
-    df["化学式"].apply(lambda f: fe.化学式转特征(f, 特征名列表)).tolist(),
-    columns=特征名列表,
+    df["化学式"].apply(lambda f: fe.formula_to_features(f, feature_names)).tolist(),
+    columns=feature_names,
 )
 y = df["带隙_eV"]
 
@@ -62,7 +62,7 @@ print("平均绝对误差 MAE =", round(mae, 3), "eV")
 print("决定系数 R2 =", round(r2, 3))
 
 # ============ 7. 特征重要性 ============
-importance = pd.Series(model.feature_importances_, index=特征名列表)
+importance = pd.Series(model.feature_importances_, index=feature_names)
 importance = importance.sort_values(ascending=False)
 print("\n最重要的 15 个特征：")
 for name, value in importance.head(15).items():
@@ -70,5 +70,8 @@ for name, value in importance.head(15).items():
 
 # ============ 8. 保存模型 + 特征信息 ============
 joblib.dump(model, "model.joblib", compress=3)
-joblib.dump({"特征名列表": 特征名列表, "元素列表": 元素列表}, "model_features.joblib")
+joblib.dump(
+    {"feature_names": feature_names, "element_list": element_list},
+    "model_features.joblib",
+)
 print("\n模型已保存到 model.joblib，特征信息保存到 model_features.joblib")
