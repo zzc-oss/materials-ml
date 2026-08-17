@@ -18,9 +18,7 @@ with open("api_key.txt", "r") as f:
     api_key = f.read().strip()
 
 # ============ 2. 定义要下载的材料范围 ============
-# 陶瓷材料 = 氧化物，常见陶瓷元素有 Al, Si, Zr, Ti, Mg, Ca
-# 这里下载含氧 + 含以下金属之一的材料
-ceramic_elements = ["Al", "Si", "Zr", "Ti", "Mg"]
+# 下载所有含氧化合物：二元、三元、四元（含 O + 任意其他元素）
 
 # 要提取的性能字段
 fields = [
@@ -35,16 +33,15 @@ fields = [
 ]
 
 print("开始下载数据...")
-print(f"查询范围：含氧 + 含 {ceramic_elements} 之一 的材料\n")
+print("查询范围：所有含氧化合物（二元、三元、四元）\n")
 
 all_docs = []
 with MPRester(api_key) as mpr:
-    # 逐个元素查询（O + 某个金属元素）
-    for element in ceramic_elements:
-        print(f"正在查询含 O + {element} 的材料...")
+    for 元数 in [2, 3, 4]:
+        print(f"正在查询含 O 的 {元数} 元化合物...")
         docs = mpr.materials.summary.search(
-            elements=["O", element],
-            num_elements=2,       # 只查二元化合物（氧化物）
+            elements=["O"],
+            num_elements=元数,
             fields=fields,
         )
         all_docs.extend(docs)
